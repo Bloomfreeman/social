@@ -1,4 +1,6 @@
 const express = require("express");
+const path = require("path");
+
 const sequelize = require("./db/sequelize");
 const postRoutes = require("./routes/posts");
 const commentRoutes= require("./routes/Comments");
@@ -23,6 +25,7 @@ app.use("/likes", likeRoutes);
 app.use("/follows",followRoutes);
 app.use("/conversations", conversationRoutes);
 app.use("/messages", messagesRoutes);
+app.use("./uploads",express.static(path.join(__dirname,"uploads")));
 
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");

@@ -1,6 +1,4 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../db/sequelize");
-
+module.exports=(sequelize,DataTypes)=>{
 const Comment = sequelize.define("Comment", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   post_id: DataTypes.INTEGER,
@@ -11,5 +9,5 @@ const Comment = sequelize.define("Comment", {
   tableName: "comments",
   timestamps: false
 });
-
-module.exports = Comment;
+return Comment;
+};

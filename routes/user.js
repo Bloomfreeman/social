@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-// const User = require("../models/User");
-// const { where } = require("sequelize");
 const {User}=require("../models")
 
 //Create user

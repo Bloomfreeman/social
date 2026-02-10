@@ -1,6 +1,4 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../db/sequelize");
-
+module.exports=(sequelize,DataTypes)=>{
 const Post = sequelize.define(
   "Post",
   {
@@ -21,6 +19,12 @@ const Post = sequelize.define(
     repost_of: {
       type: DataTypes.INTEGER,
       allowNull: true
+    },
+    media_url:{
+      type:DataTypes.TEXT
+    },
+    media_type:{
+      type:DataTypes.STRING
     }
   },
   {
@@ -28,5 +32,11 @@ const Post = sequelize.define(
     timestamps: false       // because we use created_at manually
   }
 );
+// Post.associate = models => {
+// Post.belongsTo(models.User, { foreignKey: "user_id" });
+// Post.hasMany(models.Comment, { foreignKey: "post_id" });
+// Post.hasMany(models.Like, { foreignKey: "post_id" });
+// };
 
-module.exports = Post;
+return Post;
+};

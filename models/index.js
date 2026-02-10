@@ -5,6 +5,7 @@ const User = require("./User")(sequelize, Sequelize.DataTypes);
 const Conversation = require("./Conversation")(sequelize, Sequelize.DataTypes);
 const ConversationMember = require("./ConversationMember")(sequelize, Sequelize.DataTypes);
 const Message = require("./Message")(sequelize, Sequelize.DataTypes);
+const Post = require("./Post")(sequelize, Sequelize.DataTypes);
 
 /* ASSOCIATIONS */
 Conversation.hasMany(ConversationMember, { foreignKey: "conversation_id" });
@@ -21,5 +22,6 @@ module.exports = {
   User,
   Conversation,
   ConversationMember,
-  Message
+  Message,
+  Post
 };
