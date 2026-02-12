@@ -1,18 +1,18 @@
 const express = require("express");
 const router = express.Router();
-// const Conversation=require("../models/Conversation")
-// const ConversationMember=require("../models/ConversationMember")
+const auth = require("../middleware/auth")
 const { Conversation, ConversationMember } = require("../models");
 
 
 /**
  * CREATE DM
  */
-router.post("/dm", async (req, res) => {
+router.post("/dm",auth, async (req, res) => {
   try {
-    const { user1_id, user2_id } = req.body;
+    const user1_id=req.user.id;
+    const { user2_id } = req.body;
 
-    if (!user1_id || !user2_id) {
+    if (!user2_id) {
       return res.status(400).json({ error: "Both user IDs required" });
     }
 
@@ -36,11 +36,12 @@ router.post("/dm", async (req, res) => {
 /**
  * CREATE GROUP CHAT
  */
-router.post("/group", async (req, res) => {
+router.post("/group",auth, async (req, res) => {
   try {
-    const { name, creator_id, members } = req.body;
+    const creator_id=req.user.id;
+    const { name, members } = req.body;
 
-    if (!name || !creator_id || !Array.isArray(members)) {
+    if (!name || !Array.isArray(members)) {
       return res.status(400).json({ error: "Invalid input" });
     }
 
@@ -69,9 +70,9 @@ router.post("/group", async (req, res) => {
 /**
  * GET USER CONVERSATIONS
  */
-router.get("/user/:userId", async (req, res) => {
+router.get("/my",auth, async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user.id;
 
     const convos = await Conversation.findAll({
       include: {

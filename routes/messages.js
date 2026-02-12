@@ -1,17 +1,17 @@
 const express = require("express");
 const router = express.Router();
-// const Message = require("../models/Message")
-// const ConversationMember = require("../models/ConversationMember")
+const auth =require("../middleware/auth")
 const { Message, ConversationMember } = require("../models");
 
 /**
  * SEND MESSAGE
  */
-router.post("/", async (req, res) => {
+router.post("/",auth, async (req, res) => {
   try {
-    const { conversation_id, sender_id, content } = req.body;
+    const sender_id=req.user.id;
+    const { conversation_id, content } = req.body;
 
-    if (!conversation_id || !sender_id || !content) {
+    if (!conversation_id || !content) {
       return res.status(400).json({ error: "Missing fields" });
     }
 
@@ -40,15 +40,20 @@ router.post("/", async (req, res) => {
 /**
  * GET MESSAGES IN CONVERSATION
  */
-router.get("/:conversationId", async (req, res) => {
+router.get("/:conversationId",auth, async (req, res) => {
   try {
     const { conversationId } = req.params;
-
-    const messages = await Message.findAll({
-      where: { conversation_id: conversationId },
-      order: [["created_at", "ASC"]]
+    const userId=req.user.id;
+    const member = await ConversationMember.findOne({
+      where: { conversation_id: conversationId,user_id: userId},
     });
-
+    if (!member){
+      return res.status(403).json({error:"Not a conversation member"});
+    }
+    const messages=await Message.findAll({
+      where:{conversationId:conversationId},
+      order:[["created_at","ASC"]]
+    })
     res.json(messages);
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -2,10 +2,12 @@ const express = require("express");
 const router = express.Router();
 const upload = require("../middleware/upload");
 const { Post, User,Comment,Like,sequelize } = require("../models");
+const auth=require("../middleware/auth");
 
-router.post("/", upload.single("media"), async (req, res) => {
+router.post("/",auth, upload.single("media"), async (req, res) => {
   try {
-    const { user_id, content } = req.body;
+    const user_id = req.user.id;
+    const { content } = req.body;
 
     let media_url = null;
     let media_type = null;
@@ -31,6 +33,7 @@ router.post("/", upload.single("media"), async (req, res) => {
   }
 });
 
+//get all
 router.get("/", async (req, res) => {
   try {
     const posts = await sequelize.query(
@@ -54,6 +57,7 @@ res.json(posts);
   }
 });
 
+//get post by id
 router.get("/post/:id", async (req, res) => {
   try {
     const postId = req.params.id;
@@ -93,6 +97,7 @@ router.get("/post/:id", async (req, res) => {
   }
 });
 
+//get by user id
 router.get("/users/:id", async (req, res) => {
   try {
     const userId = req.params.id;

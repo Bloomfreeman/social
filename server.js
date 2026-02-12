@@ -9,6 +9,7 @@ const followRoutes = require("./routes/follows");
 const conversationRoutes = require("./routes/conversations");
 const messagesRoutes = require("./routes/messages");
 const usersRoutes = require("./routes/user");
+const authRoutes = require("./routes/auth");
 
 const app = express();
 app.use(express.json());
@@ -18,6 +19,7 @@ sequelize.authenticate()
   .then(() => console.log("PostgreSQL connected"))
   .catch(err => console.error("DB error:", err));
 
+app.use("/auth", authRoutes);
 app.use("/posts", postRoutes);
 app.use("/users", usersRoutes);
 app.use("/comments", commentRoutes);
