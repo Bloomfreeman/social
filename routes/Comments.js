@@ -23,7 +23,7 @@ router.post("/posts/:id/comments", auth, async (req, res) => {
   }
 });
 
-
+//get post comments
 router.get("/post/:post_id", async (req, res) => {
   try {
     const postId = req.params.post_id;
@@ -53,12 +53,14 @@ router.get("/post/:post_id", async (req, res) => {
   }
 });
 
+//delet comment
 router.delete("/comments/:id", auth, async (req, res) => {
   try {
     const commentId = req.params.id;
     const userId = req.user.id;
 
-    const result = await sequelize.query(
+    // const result = 
+    await sequelize.query(
       `
       DELETE FROM comments
       WHERE id = :commentId AND user_id = :userId
