@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-
+const cors=require("cors");
 const sequelize = require("./db/sequelize");
 const postRoutes = require("./routes/posts");
 const commentRoutes= require("./routes/Comments");
@@ -18,7 +18,7 @@ app.use(express.json());
 sequelize.authenticate()
   .then(() => console.log("PostgreSQL connected"))
   .catch(err => console.error("DB error:", err));
-
+app.use(cors({origin: "http://localhost:5173"}));
 app.use("/auth", authRoutes);
 app.use("/posts", postRoutes);
 app.use("/users", usersRoutes);
